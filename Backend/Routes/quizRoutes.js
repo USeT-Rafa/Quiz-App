@@ -4,7 +4,7 @@ import { getCategories, getQuestions,addQuestions, getRandomQuestions, addQuesti
 const router = express.Router();
 
 router.get('/categories', getCategories);
-router.get('/questions', getQuestions);
+router.get('/questions/:category', getQuestions);
 router.get('/random',getRandomQuestions);
 
 // Route to add a question

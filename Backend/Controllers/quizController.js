@@ -12,7 +12,7 @@ export const getCategories =async (req, res) => {
 
 export const getQuestions = async (req, res) => {
     try {
-        const {category} = req.query;
+        const {category} = req.params;
         const limit = parseInt(process.env.LIMIT_QUESTIONS) || 10;
 
         if(!category){
@@ -23,7 +23,7 @@ export const getQuestions = async (req, res) => {
             {$sample : {size : limit}}
         ]);
         if(!questions.length){
-            res.status(404).json({message:"Questions not found for the given category"});
+            return res.status(404).json({message:"Questions not found for the given category"});
         };
 
         res.status(200).json({questions});
@@ -41,7 +41,7 @@ export const getRandomQuestions =async (req, res) => {
         ]);
 
         if(!randomCategories.length){
-            res.status(404).json({message:"No categories found"});
+            return res.status(404).json({message:"No categories found"});
         }
 
         const randomQuestions = await Promise.all(
