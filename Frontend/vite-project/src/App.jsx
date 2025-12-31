@@ -1,11 +1,14 @@
-import { useState } from 'react'
+import Home from "./pages/home.jsx";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 
 function App() {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-900 text-white text-3xl">
-      Quiz App
-    </div>
+    <Router>
+      <Routes>
+        <Route path="/" element={<Home />} />
+      </Routes>
+    </Router>
   );
 }
 

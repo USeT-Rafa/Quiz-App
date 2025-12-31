@@ -3,10 +3,12 @@ import dotenv from 'dotenv';
 import connectDB from './ConfigDB/connectDB.js';
 import quizRoutes from './Routes/quizRoutes.js';
 
+
 dotenv.config();
 
 const app = express();
 app.use(express.json());
+
 
 const PORT = process.env.PORT || 5000;
 

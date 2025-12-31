@@ -1,22 +1,22 @@
 import { useState, useEffect } from "react";
-import { getRandom } from "../api/quizAPI";
+import { getRandomQuestions } from "../api/quizAPI";
 
 export const useQuizRandom = () => {
     const [randomQuestions, setRandomQuestions] = useState([]);
-    const [isLoading, setisLoading] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(null);
 
     useEffect(()=>{
         const fetchRandomQuestions = async () =>{
-            setisLoading(true);
+            setIsLoading(true);
             try {
-                const data = await getRandom();
-                setRandomQuestions(data);
+                const data = await getRandomQuestions();
+                setRandomQuestions(data.questions);
             } catch (error) {
-                setError(error);
+                setError(error.message || "Failed to load questions");
             }
             finally{
-                setisLoading(false);
+                setIsLoading(false);
             }
         };
 

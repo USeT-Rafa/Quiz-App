@@ -12,9 +12,9 @@ export const useQuizCategories = () =>{
             setIsLoading(true);
             try {
                 const data = await getCategories();
-                setCategories(data);
+                setCategories(data.categories);
             } catch (error) {
-                setError(error);
+                setError(error.message || "Failed to load categories");
             } finally{
                 setIsLoading(false);    
             }
