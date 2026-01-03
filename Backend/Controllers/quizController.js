@@ -12,8 +12,7 @@ export const getCategories =async (req, res) => {
 
 export const getQuestions = async (req, res) => {
     try {
-        const {category} = req.params;
-        const {difficulty} = req.query;
+        const { category, difficulty } = req.query;
         const limit = parseInt(process.env.LIMIT_QUESTIONS) || 10;
 
         if(!category){
@@ -35,6 +34,7 @@ export const getQuestions = async (req, res) => {
         };
 
         res.status(200).json({questions});
+        console.log("LImit:", limit);   
     } catch (error) {
         res.status(500).json({message:"Error in getting questions", error: error.message});
     }
@@ -71,12 +71,13 @@ export const getRandomQuestions =async (req, res) => {
 
 export const addQuestion = async (req, res) => {
     try {
-        const {category, question, options, answer} = req.body;//
+        const {category, question, options, answer, difficulty} = req.body;//
         const newQuestion = new Question({
             category,
             question,
             options,
-            answer
+            answer,
+            difficulty
         });
 
         await newQuestion.save();
@@ -88,21 +89,38 @@ export const addQuestion = async (req, res) => {
 };
 
 export const addQuestions = async (req, res) => {
-    try {
-        const {category, question} = req.body;
-        if(!category || !Array.isArray(question) || question.length === 0){
-            return res.status(400).json({message: "Invalid input data"});
-        }
-        const questionDocs = question.map(q => ({
-            category,
-            question: q.question,
-            options: q.options,
-            answer: q.answer
-        }));
-        await Question.insertMany(questionDocs);
-        res.status(201).json({message: "Questions added successfully"});
+  try {
+    const questions = req.body;
 
-    } catch (error) {
-        res.status(500).json({message: "Failed to add questions", error: error.message});
+    if (!Array.isArray(questions) || questions.length === 0) {
+      return res.status(400).json({ message: "Invalid input data" });
     }
+
+    // Optional: basic validation per question
+    for (const q of questions) {
+      if (
+        !q.category ||
+        !q.difficulty ||
+        !q.question ||
+        !Array.isArray(q.options) ||
+        !q.answer
+      ) {
+        return res.status(400).json({
+          message: "Each question must have category, difficulty, question, options, and answer"
+        });
+      }
+    }
+
+    await Question.insertMany(questions);
+
+    res.status(201).json({
+      message: "Questions added successfully",
+      count: questions.length
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: "Failed to add questions",
+      error: error.message
+    });
+  }
 };

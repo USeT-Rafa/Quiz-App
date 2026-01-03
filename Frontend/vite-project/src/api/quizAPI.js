@@ -25,7 +25,7 @@ export const getCategories = async () =>{
 
 export const getQuestions = async (category, difficulty) =>{
     try {
-        const response = await API.get(`/api/quiz/questions/${category}`, { params: { difficulty } });
+        const response = await API.get(`/api/quiz/questions`, { params: { category, difficulty } });
         return response.data;
     } catch (error) {
         console.error('Error fetching questions:', error);
